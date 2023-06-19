@@ -8,7 +8,163 @@
 </head>
 
 <body>
-  <div id="app"></div>
+  <form id="app">
+    <h1>img-seq-pack</h1>
+
+    <h2>1. 이미지 파일 선택</h2>
+    <input
+      type="file"
+      name="files"
+      multiple
+    />
+    <details id="file-list">
+      <summary>선택한 파일 (3개)</summary>
+      <ol>
+        <li>image-01.tga</li>
+        <li>image-02.tga</li>
+        <li>image-03.tga</li>
+      </ol>
+    </details>
+
+    <h2>2. 옵션</h2>
+    <dl class="options">
+      <div>
+        <dt>출력물 제목</dt>
+        <dd>
+          <input
+            type="text"
+            name="title"
+            value=""
+            placeholder="img-seq-pack"
+          />
+        </dd>
+      </div>
+
+      <div>
+        <dt>WEBP 품질(%)</dt>
+        <dd>
+          <input
+            type="number"
+            name="quality-webp"
+            value="70"
+            min="0"
+            max="100"
+          />
+        </dd>
+      </div>
+
+      <div>
+        <dt>최대 크기 제한</dt>
+        <dd>
+          <label>
+            <input
+              type="checkbox"
+              name="max-size"
+            />
+            사용
+          </label>
+        </dd>
+        <dd>
+          <input
+            type="number"
+            name="max-size-width"
+            value="1920"
+            min="1"
+            max="16383"
+          />
+          ×
+          <input
+            type="number"
+            name="max-size-height"
+            value="1080"
+            min="1"
+            max="16383"
+          />
+        </dd>
+      </div>
+
+      <div>
+        <dt>페이지 이름 생성 방법</dt>
+        <dd>
+          <label>
+            <input
+              type="radio"
+              name="page-name"
+              value="original"
+            />
+            파일명 그대로 사용 (확장자 포함)
+          </label>
+        </dd>
+        <dd>
+          <label>
+            <input
+              type="radio"
+              name="page-name"
+              value="filename-only"
+              checked
+            />
+            확장자를 제외한 파일명 사용
+          </label>
+        </dd>
+        <dd>
+          <label>
+            <input
+              type="radio"
+              name="page-name"
+              value="replace-string"
+            />
+            단순 치환
+          </label>
+        </dd>
+        <dd>
+          <label>
+            <input
+              type="radio"
+              name="page-name"
+              value="replace-regex"
+            />
+            정규 표현식 치환
+          </label>
+        </dd>
+        <dd>
+          <input
+            type="text"
+            name="page-name-find"
+            value=""
+            placeholder="찾을 내용"
+          />
+          →
+          <input
+            type="text"
+            name="page-name-replace"
+            value=""
+            placeholder="바꿀 내용"
+          />
+        </dd>
+      </div>
+
+      <div>
+        <dt>페이지 정렬</dt>
+        <dd>
+          <label>
+            <input
+              type="checkbox"
+              name="page-sort"
+              checked
+            />
+            원본 파일명 순서대로 정렬
+          </label>
+        </dd>
+      </div>
+    </dl>
+
+    <h2>3. 변환</h2>
+    <div>
+      <button type="submit">변환하기</button>
+      95% 진행 중 (72초 경과)
+    </div>
+  </form>
+
   <script type="module" src="/src/index.ts"></script>
 </body>
 
