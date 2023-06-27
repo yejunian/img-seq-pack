@@ -5,12 +5,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>[["title"]]</title>
+
+  <script type="application/json" id="data">[["data"]]</script>
+  <script type="module" src="/src/template.ts"></script>
 </head>
 
 <body>
-  <div id="app"></div>
-  <script type="application/json" id="data">[["data"]]</script>
-  <script type="module" src="/src/template.ts"></script>
+  <div id="app">
+    <header>
+      <h1>[["title"]]</h1>
+    </header>
+
+    <main id="contents"></main>
+
+    <footer>
+      <ul>
+        <li>Packed by img-seq-pack</li>
+        <li>
+          <a href="https://yejunian.github.io/img-seq-pack/">Webpage</a>
+          |
+          <a href="https://github.com/yejunian/img-seq-pack">Repo</a>
+        </li>
+      </ul>
+    </footer>
+  </div>
 </body>
 
 </html>
