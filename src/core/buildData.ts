@@ -1,6 +1,7 @@
+import type PackedData from './PackedData'
 import decodeImage, { DecodeResult } from './decodeImage'
 
-async function buildData(fileList: FileList) {
+async function buildData(fileList: FileList): Promise<PackedData> {
   const hashToImageIndex = new Map<string, number>()
   const imageRefs: string[] = []
   const pageList: number[] = []
