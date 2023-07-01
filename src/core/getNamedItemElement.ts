@@ -1,4 +1,4 @@
-export function getNamedItemElement(
+function getNamedItemElement(
   form: HTMLFormElement,
   name: string
 ): HTMLInputElement {
@@ -14,3 +14,5 @@ export function getNamedItemElement(
     )
   }
 }
+
+export default getNamedItemElement

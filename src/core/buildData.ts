@@ -1,17 +1,21 @@
 import sha1 from 'hash.js/lib/hash/sha/1'
 import type PackedData from './PackedData'
 import decodeImage from './decodeImage'
+import { NamedItemKVPairs } from './NamedItemKVPairs'
 
 const imageDataKeys: (keyof ImageData)[] = ['width', 'height', 'data']
 
-async function buildData(fileList: FileList): Promise<PackedData> {
+async function buildData(
+  fileList: FileList,
+  options: NamedItemKVPairs
+): Promise<PackedData> {
   const hashToRefIndex = new Map<string, number>()
   const imageRefs: string[] = []
   const refToFileIndex: number[] = []
   const pageList: number[] = []
 
   for (let i = 0; i < fileList.length; i += 1) {
-    const canvas = await decodeImage(fileList[i])
+    const canvas = await decodeImage(fileList[i], options)
     const looseHash = hashImageData(getImageData(canvas, 64, 64))
 
     if (hashToRefIndex.has(looseHash)) {
@@ -19,7 +23,7 @@ async function buildData(fileList: FileList): Promise<PackedData> {
 
       if (refIndex >= 0) {
         const fileIndex = refToFileIndex[refIndex]
-        const priorCanvas = await decodeImage(fileList[fileIndex])
+        const priorCanvas = await decodeImage(fileList[fileIndex], options)
         const priorImageData = getImageData(priorCanvas)
         const priorFullHash = hashImageData(priorImageData)
 
