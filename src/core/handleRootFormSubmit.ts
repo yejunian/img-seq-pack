@@ -18,8 +18,8 @@ async function handleRootFormSubmit(
   const namedItemKVPairs = getNamedItemKVPairs(this)
 
   const data = await buildData(filesElement.files, namedItemKVPairs)
-  const blob = await bundleData(JSON.stringify(data))
-  downloadBlob(blob)
+  const blob = await bundleData(JSON.stringify(data), namedItemKVPairs.title)
+  downloadBlob(blob, namedItemKVPairs.title)
 }
 
 export default handleRootFormSubmit

@@ -1,9 +1,9 @@
-function downloadBlob(blob: Blob, filename?: string): void {
+function downloadBlob(blob: Blob, title?: string): void {
   const url = URL.createObjectURL(blob)
 
   const anchor = document.createElement('a')
   anchor.href = url
-  anchor.download = filename ? `${filename}.html` : 'img-seq-pack.html'
+  anchor.download = title ? `${title}.html` : 'img-seq-pack.html'
   anchor.click()
 
   URL.revokeObjectURL(url)
