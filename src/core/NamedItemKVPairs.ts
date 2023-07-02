@@ -18,7 +18,7 @@ export type NamedItemKVPairs = NamedBooleanKVPairs &
 type NamedBooleanKey = keyof NamedBooleanKVPairs
 type NamedNumberKey = keyof NamedNumberKVPairs
 type NamedStringKey = keyof NamedStringKVPairs
-type NamedItemKey = keyof NamedItemKVPairs
+export type NamedItemKey = keyof NamedItemKVPairs
 
 const namedBooleanKeySet = new Set<NamedBooleanKey>([
   'max-size-enabled',
@@ -30,7 +30,7 @@ const namedNumberKeySet = new Set<NamedNumberKey>([
   'quality-webp',
 ])
 const namedStringKeySet = new Set<NamedStringKey>(['page-name', 'title'])
-const namedItemKeySet = new Set<NamedItemKey>([
+export const namedItemKeySet = new Set<NamedItemKey>([
   ...namedBooleanKeySet,
   ...namedNumberKeySet,
   ...namedStringKeySet,
