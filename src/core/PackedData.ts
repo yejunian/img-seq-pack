@@ -1,6 +1,6 @@
 type PackedData = {
-  imageRefs: string[]
-  pageList: number[]
+  images: string[]
+  pages: number[]
 }
 
 export default PackedData

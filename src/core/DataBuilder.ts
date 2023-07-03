@@ -53,8 +53,8 @@ class DataBuilder {
 
   getData(): PackedData {
     return {
-      imageRefs: [...this.images],
-      pageList: [...this.pageContents],
+      images: [...this.images],
+      pages: [...this.pageContents],
     }
   }
 }

@@ -20,31 +20,31 @@ async function getPackedData(): Promise<PackedData> {
 
 function parseAndValidateData(jsonText: string): PackedData {
   try {
-    const { imageRefs, pageList } = JSON.parse(jsonText) as PackedData
+    const { images, pages } = JSON.parse(jsonText) as PackedData
 
-    for (let i = 0; i < imageRefs.length; i += 1) {
+    for (let i = 0; i < images.length; i += 1) {
       if (
-        typeof imageRefs[i] !== 'string' ||
-        !imageRefs[i].startsWith('data:image/')
+        typeof images[i] !== 'string' ||
+        !images[i].startsWith('data:image/')
       ) {
-        imageRefs[i] = ''
+        images[i] = ''
       }
     }
 
-    for (let i = 0; i < pageList.length; i += 1) {
-      if (typeof pageList[i] !== 'number') {
-        pageList[i] = -1
+    for (let i = 0; i < pages.length; i += 1) {
+      if (typeof pages[i] !== 'number') {
+        pages[i] = -1
       }
     }
 
     return {
-      imageRefs,
-      pageList,
+      images,
+      pages,
     }
   } catch (error) {
     return {
-      imageRefs: [],
-      pageList: [],
+      images: [],
+      pages: [],
     }
   }
 }
