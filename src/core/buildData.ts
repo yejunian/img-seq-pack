@@ -2,6 +2,7 @@ import sha1 from 'hash.js/lib/hash/sha/1'
 import type PackedData from './PackedData'
 import decodeImage from './decodeImage'
 import { NamedItemKVPairs } from './NamedItemKVPairs'
+import DataBuilder from './DataBuilder'
 
 const imageDataKeys: (keyof ImageData)[] = ['width', 'height', 'data']
 
@@ -9,59 +10,44 @@ async function buildData(
   fileList: FileList,
   options: NamedItemKVPairs
 ): Promise<PackedData> {
-  const hashToRefIndex = new Map<string, number>()
-  const imageRefs: string[] = []
-  const refToFileIndex: number[] = []
-  const pageList: number[] = []
+  const builder = new DataBuilder()
 
   for (let i = 0; i < fileList.length; i += 1) {
     const canvas = await decodeImage(fileList[i], options)
     const looseHash = hashImageData(getImageData(canvas, 64, 64))
 
-    if (hashToRefIndex.has(looseHash)) {
-      const refIndex = hashToRefIndex.get(looseHash)!
+    if (builder.hasHash(looseHash)) {
+      const imageIndex = builder.getImageIndex(looseHash)
 
-      if (refIndex >= 0) {
-        const fileIndex = refToFileIndex[refIndex]
+      if (imageIndex !== DataBuilder.IMAGE_INDEX_TO_COLLISION) {
+        const fileIndex = builder.getFirstFileIndex(imageIndex)
         const priorCanvas = await decodeImage(fileList[fileIndex], options)
         const priorImageData = getImageData(priorCanvas)
         const priorFullHash = hashImageData(priorImageData)
 
-        hashToRefIndex.set(priorFullHash, refIndex)
-        hashToRefIndex.set(looseHash, -1)
+        builder.replaceCollidingHash(looseHash, priorFullHash)
       }
 
-      const currentImageData = getImageData(canvas)
-      const currentFullHash = hashImageData(currentImageData)
+      const currentFullHash = hashImageData(getImageData(canvas))
 
-      if (hashToRefIndex.has(currentFullHash)) {
-        const refIndex = hashToRefIndex.get(currentFullHash)!
-        pageList.push(refIndex)
+      if (builder.hasHash(currentFullHash)) {
+        const imageIndex = builder.getImageIndex(currentFullHash)
+        builder.addPage(imageIndex)
       } else {
-        const refIndex = createNewImageRef(i, canvas, currentFullHash)
-        pageList.push(refIndex)
+        const imageIndex = builder.registerHashAndCreateData(
+          currentFullHash,
+          canvas,
+          i
+        )
+        builder.addPage(imageIndex)
       }
     } else {
-      const refIndex = createNewImageRef(i, canvas, looseHash)
-      pageList.push(refIndex)
+      const imageIndex = builder.registerHashAndCreateData(looseHash, canvas, i)
+      builder.addPage(imageIndex)
     }
   }
 
-  function createNewImageRef(
-    fileIndex: number,
-    canvas: HTMLCanvasElement,
-    hash: string
-  ): number {
-    const refIndex = imageRefs.length
-
-    hashToRefIndex.set(hash, refIndex)
-    imageRefs.push(canvas.toDataURL('image/webp', 0.7))
-    refToFileIndex.push(fileIndex)
-
-    return refIndex
-  }
-
-  return { imageRefs, pageList }
+  return builder.getData()
 }
 
 function getImageData(
