@@ -10,7 +10,7 @@ async function buildData(
   fileList: FileList,
   options: NamedItemKVPairs
 ): Promise<PackedData> {
-  const builder = new DataBuilder()
+  const builder = new DataBuilder(options)
 
   for (let i = 0; i < fileList.length; i += 1) {
     const canvas = await decodeImage(fileList[i], options)

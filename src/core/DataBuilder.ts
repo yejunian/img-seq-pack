@@ -1,3 +1,4 @@
+import { NamedItemKVPairs } from './NamedItemKVPairs'
 import type PackedData from './PackedData'
 
 class DataBuilder {
@@ -8,6 +9,12 @@ class DataBuilder {
   private images: string[] = []
   private imageIndexToFirstFileIndex: number[] = []
   private pageContents: number[] = []
+
+  private webpQuality = 0.7
+
+  constructor(options: NamedItemKVPairs) {
+    this.webpQuality = options['quality-webp'] / 100
+  }
 
   hasHash(hash: string): boolean {
     return this.hashToImageIndex.has(hash)
@@ -45,7 +52,7 @@ class DataBuilder {
     const imageIndex = this.images.length
 
     this.hashToImageIndex.set(hash, imageIndex)
-    this.images.push(canvas.toDataURL('image/webp', 0.7))
+    this.images.push(canvas.toDataURL('image/webp', this.webpQuality))
     this.imageIndexToFirstFileIndex.push(fileIndex)
 
     return imageIndex
