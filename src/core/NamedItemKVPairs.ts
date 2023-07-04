@@ -1,14 +1,20 @@
 type NamedBooleanKVPairs = {
+  'keep-extension': boolean
   'max-size-enabled': boolean
   'page-sort-enabled': boolean
+  'replace-enabled': boolean
+  'replace-regex-enabled': boolean
 }
 type NamedNumberKVPairs = {
   'max-size-height': number
   'max-size-width': number
+  'page-sequence-start': number
   'quality-webp': number
 }
 type NamedStringKVPairs = {
-  'page-name': string
+  'page-naming': string
+  'replace-find': string
+  'replace-replace': string
   title: string
 }
 export type NamedItemKVPairs = NamedBooleanKVPairs &
@@ -21,15 +27,24 @@ type NamedStringKey = keyof NamedStringKVPairs
 export type NamedItemKey = keyof NamedItemKVPairs
 
 const namedBooleanKeySet = new Set<NamedBooleanKey>([
+  'keep-extension',
   'max-size-enabled',
   'page-sort-enabled',
+  'replace-enabled',
+  'replace-regex-enabled',
 ])
 const namedNumberKeySet = new Set<NamedNumberKey>([
   'max-size-height',
   'max-size-width',
+  'page-sequence-start',
   'quality-webp',
 ])
-const namedStringKeySet = new Set<NamedStringKey>(['page-name', 'title'])
+const namedStringKeySet = new Set<NamedStringKey>([
+  'page-naming',
+  'replace-find',
+  'replace-replace',
+  'title',
+])
 export const namedItemKeySet = new Set<NamedItemKey>([
   ...namedBooleanKeySet,
   ...namedNumberKeySet,
@@ -76,20 +91,26 @@ export function getNamedItemKVPairs(form: HTMLFormElement): NamedItemKVPairs {
 
 function getDefaultNamedBooleanKVPairs(): NamedBooleanKVPairs {
   return {
+    'keep-extension': false,
     'max-size-enabled': true,
     'page-sort-enabled': true,
+    'replace-enabled': false,
+    'replace-regex-enabled': false,
   }
 }
 function getDefaultNamedNumberKVPairs(): NamedNumberKVPairs {
   return {
-    'max-size-height': 960,
-    'max-size-width': 540,
+    'max-size-height': 540,
+    'max-size-width': 960,
+    'page-sequence-start': 1,
     'quality-webp': 70,
   }
 }
 function getDefaultNamedStringKVPairs(): NamedStringKVPairs {
   return {
-    'page-name': 'filename-only',
+    'page-naming': 'sequence',
+    'replace-find': '',
+    'replace-replace': '',
     title: '',
   }
 }
