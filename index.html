@@ -12,18 +12,10 @@
     <h1>img-seq-pack</h1>
 
     <h2>1. 이미지 파일 선택</h2>
-    <input
-      type="file"
-      name="files"
-      multiple
-    />
+    <input type="file" name="files" multiple required />
     <details id="file-list">
-      <summary>선택한 파일 (3개)</summary>
-      <ol>
-        <li>image-01.tga</li>
-        <li>image-02.tga</li>
-        <li>image-03.tga</li>
-      </ol>
+      <summary>선택한 파일 목록 (펼치기·접기)</summary>
+      <ol></ol>
     </details>
 
     <h2>2. 옵션</h2>
@@ -31,116 +23,29 @@
       <div>
         <dt>출력물 제목</dt>
         <dd>
-          <input
-            type="text"
-            name="title"
-            value=""
-            placeholder="img-seq-pack"
-          />
+          <input type="text" name="title" value="" placeholder="img-seq-pack" />
         </dd>
       </div>
 
       <div>
-        <dt>WEBP 품질(%)</dt>
+        <dt>출력 이미지(WEBP) 품질(%)</dt>
         <dd>
-          <input
-            type="number"
-            name="quality-webp"
-            value="70"
-            min="0"
-            max="100"
-          />
+          <input type="number" name="quality-webp" value="70" min="0" max="100" />
         </dd>
       </div>
 
       <div>
-        <dt>최대 크기 제한</dt>
+        <dt>이미지 최대 크기 제한</dt>
         <dd>
           <label>
-            <input
-              type="checkbox"
-              name="max-size-enabled"
-              checked
-            />
+            <input type="checkbox" name="max-size-enabled" checked />
             사용
           </label>
         </dd>
-        <dd>
-          <input
-            type="number"
-            name="max-size-width"
-            value="960"
-            min="1"
-            max="16383"
-          />
+        <dd class="sub">
+          <input type="number" name="max-size-width" value="960" min="1" max="16383" />
           ×
-          <input
-            type="number"
-            name="max-size-height"
-            value="540"
-            min="1"
-            max="16383"
-          />
-        </dd>
-      </div>
-
-      <div>
-        <dt>페이지 이름 생성 방법</dt>
-        <dd>
-          <label>
-            <input
-              type="radio"
-              name="page-name"
-              value="original"
-            />
-            파일명 그대로 사용 (확장자 포함)
-          </label>
-        </dd>
-        <dd>
-          <label>
-            <input
-              type="radio"
-              name="page-name"
-              value="filename-only"
-              checked
-            />
-            확장자를 제외한 파일명 사용
-          </label>
-        </dd>
-        <dd>
-          <label>
-            <input
-              type="radio"
-              name="page-name"
-              value="replace-string"
-            />
-            단순 치환
-          </label>
-        </dd>
-        <dd>
-          <label>
-            <input
-              type="radio"
-              name="page-name"
-              value="replace-regex"
-            />
-            정규 표현식 치환
-          </label>
-        </dd>
-        <dd>
-          <input
-            type="text"
-            name="page-name-find"
-            value=""
-            placeholder="찾을 내용"
-          />
-          →
-          <input
-            type="text"
-            name="page-name-replace"
-            value=""
-            placeholder="바꿀 내용"
-          />
+          <input type="number" name="max-size-height" value="540" min="1" max="16383" />
         </dd>
       </div>
 
@@ -148,13 +53,51 @@
         <dt>페이지 정렬</dt>
         <dd>
           <label>
-            <input
-              type="checkbox"
-              name="page-sort"
-              checked
-            />
+            <input type="checkbox" name="page-sort-enabled" checked />
             원본 파일명 순서대로 정렬
           </label>
+        </dd>
+      </div>
+
+      <div>
+        <dt>페이지 이름 생성 방법</dt>
+        <dd>
+          <label>
+            <input type="radio" name="page-name" value="ascending" />
+            지정 숫자부터 순차적으로 생성:
+          </label>
+        </dd>
+        <dd class="sub">
+          <input type="number" name="page-name-start" value="1" min="0" />
+        </dd>
+        <dd>
+          <label>
+            <input type="radio" name="page-name" value="original" />
+            파일명 그대로 사용 (확장자 포함)
+          </label>
+        </dd>
+        <dd>
+          <label>
+            <input type="radio" name="page-name" value="filename-only" checked />
+            확장자를 제외한 파일명 사용
+          </label>
+        </dd>
+        <dd>
+          <label>
+            <input type="radio" name="page-name" value="replace-string" />
+            단순 치환
+          </label>
+        </dd>
+        <dd>
+          <label>
+            <input type="radio" name="page-name" value="replace-regex" />
+            정규 표현식 치환:
+          </label>
+        </dd>
+        <dd class="sub">
+          <input type="text" name="page-name-find" value="" placeholder="찾을 내용" />
+          →
+          <input type="text" name="page-name-replace" value="" placeholder="바꿀 내용" />
         </dd>
       </div>
     </dl>
@@ -162,7 +105,10 @@
     <h2>3. 변환</h2>
     <div>
       <button type="submit">변환하기</button>
-      95% 진행 중 (72초 경과)
+    </div>
+    <div>
+      <progress id="pack-progress" value="0" min="1"></progress>
+      <p id="pack-description">이미지를 선택하고 변환하기 버튼을 누르세요.</p>
     </div>
   </form>
 
