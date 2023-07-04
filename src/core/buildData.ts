@@ -3,12 +3,14 @@ import type PackedData from './PackedData'
 import decodeImage from './decodeImage'
 import { NamedItemKVPairs } from './NamedItemKVPairs'
 import DataBuilder from './DataBuilder'
+import ProgressUpdater from './ProgressUpdater'
 
 const imageDataKeys: (keyof ImageData)[] = ['width', 'height', 'data']
 
 async function buildData(
   fileList: FileList,
-  options: NamedItemKVPairs
+  options: NamedItemKVPairs,
+  progressUpdater?: ProgressUpdater
 ): Promise<PackedData> {
   const builder = new DataBuilder(options)
 
@@ -45,6 +47,8 @@ async function buildData(
       const imageIndex = builder.registerHashAndCreateData(looseHash, canvas, i)
       builder.addPage(imageIndex)
     }
+
+    await progressUpdater?.updateProgress((i + 1) / fileList.length)
   }
 
   return builder.getData()
