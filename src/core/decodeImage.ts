@@ -1,19 +1,23 @@
 import { NamedItemKVPairs } from './NamedItemKVPairs'
+import TgaLoader from 'tga-js'
 
-const decodableTypes = {
-  ImageBitmap: new Set(['image/avif', 'image/webp', 'image/jpeg', 'image/png']),
+const decodableTypePatterns = {
+  ImageBitmap: /^image\/(?:avif|gif|jpeg|png|webp)$/,
+  TgaLoader: /^(?:application|image)\/(?:x-)?(?:targa|tga)$/,
 }
 
 async function decodeImage(
   file: File,
   options: NamedItemKVPairs
 ): Promise<HTMLCanvasElement> {
-  if (!decodableTypes.ImageBitmap.has(file.type)) {
+  if (decodableTypePatterns.ImageBitmap.test(file.type)) {
+    return await decodeByImageBitmap(file, options)
+  } else if (decodableTypePatterns.TgaLoader.test(file.type)) {
+    return decodeByTgaLoader(file, options)
+  } else {
     const extension = file.name.replace(/^.+\.(.+?)$/, '$1')
     throw new Error(`*.${extension} (${file.type}) is not supported.`)
   }
-
-  return await decodeByImageBitmap(file, options)
 }
 
 async function decodeByImageBitmap(
@@ -23,6 +27,33 @@ async function decodeByImageBitmap(
   const imageBitmap = await window.createImageBitmap(file)
   const { width: sourceWidth, height: sourceHeight } = imageBitmap
   const [width, height] = getLimitedSize(sourceWidth, sourceHeight, options)
+
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+
+  const ctx = canvas.getContext('2d')
+  ctx?.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height)
+
+  imageBitmap.close()
+
+  return canvas
+}
+
+async function decodeByTgaLoader(
+  file: File,
+  options: NamedItemKVPairs
+): Promise<HTMLCanvasElement> {
+  const tga = new TgaLoader()
+  const data = new Uint8Array(await file.arrayBuffer())
+  tga.load(data)
+
+  const imageBitmap = await window.createImageBitmap(tga.getImageData())
+  const [width, height] = getLimitedSize(
+    imageBitmap.width,
+    imageBitmap.height,
+    options
+  )
 
   const canvas = document.createElement('canvas')
   canvas.width = width
