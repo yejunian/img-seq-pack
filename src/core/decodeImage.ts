@@ -25,16 +25,7 @@ async function decodeByImageBitmap(
   options: NamedItemKVPairs
 ): Promise<HTMLCanvasElement> {
   const imageBitmap = await window.createImageBitmap(file)
-  const { width: sourceWidth, height: sourceHeight } = imageBitmap
-  const [width, height] = getLimitedSize(sourceWidth, sourceHeight, options)
-
-  const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
-
-  const ctx = canvas.getContext('2d')
-  ctx?.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height)
-
+  const canvas = getCanvasFromImageBitmap(imageBitmap, options)
   imageBitmap.close()
 
   return canvas
@@ -44,11 +35,25 @@ async function decodeByTgaLoader(
   file: File,
   options: NamedItemKVPairs
 ): Promise<HTMLCanvasElement> {
-  const tga = new TgaLoader()
-  const data = new Uint8Array(await file.arrayBuffer())
-  tga.load(data)
+  const imageBitmap = await window.createImageBitmap(
+    await decodeTargaIntoImageData(file)
+  )
+  const canvas = getCanvasFromImageBitmap(imageBitmap, options)
+  imageBitmap.close()
 
-  const imageBitmap = await window.createImageBitmap(tga.getImageData())
+  return canvas
+}
+
+async function decodeTargaIntoImageData(file: File): Promise<ImageData> {
+  const tga = new TgaLoader()
+  tga.load(new Uint8Array(await file.arrayBuffer()))
+  return tga.getImageData()
+}
+
+function getCanvasFromImageBitmap(
+  imageBitmap: ImageBitmap,
+  options: NamedItemKVPairs
+): HTMLCanvasElement {
   const [width, height] = getLimitedSize(
     imageBitmap.width,
     imageBitmap.height,
@@ -61,8 +66,6 @@ async function decodeByTgaLoader(
 
   const ctx = canvas.getContext('2d')
   ctx?.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height)
-
-  imageBitmap.close()
 
   return canvas
 }
