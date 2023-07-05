@@ -13,11 +13,11 @@ async function buildData(
   options: NamedItemKVPairs,
   progressUpdater?: ProgressUpdater
 ): Promise<PackedData> {
-  const fileOrder = buildPageMetadata(fileList, options)
+  const pageMetadata = buildPageMetadata(fileList, options)
   const builder = new DataBuilder(options)
 
-  for (let i = 0; i < fileOrder.length; i += 1) {
-    const file = fileList[fileOrder[i].fileIndex]
+  for (let i = 0; i < pageMetadata.length; i += 1) {
+    const file = fileList[pageMetadata[i].fileIndex]
 
     const canvas = await decodeImage(file, options)
     const looseHash = hashImageData(getImageData(canvas, 64, 64))
@@ -38,18 +38,18 @@ async function buildData(
 
       if (builder.hasHash(currentFullHash)) {
         const imageIndex = builder.getImageIndex(currentFullHash)
-        builder.addPage(imageIndex)
+        builder.addPage(imageIndex, pageMetadata[i].name)
       } else {
         const imageIndex = builder.registerHashAndCreateData(
           currentFullHash,
           canvas,
           i
         )
-        builder.addPage(imageIndex)
+        builder.addPage(imageIndex, pageMetadata[i].name)
       }
     } else {
       const imageIndex = builder.registerHashAndCreateData(looseHash, canvas, i)
-      builder.addPage(imageIndex)
+      builder.addPage(imageIndex, pageMetadata[i].name)
     }
 
     await progressUpdater?.updateProgress((i + 1) / fileList.length)

@@ -9,6 +9,7 @@ class DataBuilder {
   private images: string[] = []
   private imageIndexToFirstFileIndex: number[] = []
   private pageContents: number[] = []
+  private pageNames: string[] = []
 
   private webpQuality = 0.7
 
@@ -40,8 +41,9 @@ class DataBuilder {
     this.hashToImageIndex.set(oldHash, DataBuilder.IMAGE_INDEX_TO_COLLISION)
   }
 
-  addPage(imageIndex: number): void {
+  addPage(imageIndex: number, pageName: string) {
     this.pageContents.push(imageIndex)
+    this.pageNames.push(pageName)
   }
 
   registerHashAndCreateData(
@@ -62,6 +64,7 @@ class DataBuilder {
     return {
       images: [...this.images],
       pages: [...this.pageContents],
+      names: [...this.pageNames],
     }
   }
 }
