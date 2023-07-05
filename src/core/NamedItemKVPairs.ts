@@ -78,7 +78,10 @@ export function getNamedItemKVPairs(form: HTMLFormElement): NamedItemKVPairs {
     if (isNamedBooleanKey(name)) {
       booleanPairs[name] = item.checked
     } else if (isNamedNumberKey(name)) {
-      numberPairs[name] = item.valueAsNumber
+      const value = item.valueAsNumber
+      if (Math.abs(value) <= Number.MAX_SAFE_INTEGER) {
+        numberPairs[name] = value
+      }
     } else if (isNamedStringKey(name)) {
       stringPairs[name] = item.value
     }
