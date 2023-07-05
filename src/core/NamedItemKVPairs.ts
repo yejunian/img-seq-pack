@@ -1,9 +1,11 @@
 type NamedBooleanKVPairs = {
   'keep-extension': boolean
-  'max-size-enabled': boolean
-  'page-sort-enabled': boolean
-  'replace-enabled': boolean
-  'replace-regex-enabled': boolean
+  'max-size': boolean
+  'page-sort': boolean
+  'page-sort-natural': boolean
+  'page-sort-split': boolean
+  'replace': boolean
+  'replace-regex': boolean
 }
 type NamedNumberKVPairs = {
   'max-size-height': number
@@ -28,10 +30,10 @@ export type NamedItemKey = keyof NamedItemKVPairs
 
 const namedBooleanKeySet = new Set<NamedBooleanKey>([
   'keep-extension',
-  'max-size-enabled',
-  'page-sort-enabled',
-  'replace-enabled',
-  'replace-regex-enabled',
+  'max-size',
+  'page-sort',
+  'replace',
+  'replace-regex',
 ])
 const namedNumberKeySet = new Set<NamedNumberKey>([
   'max-size-height',
@@ -92,10 +94,12 @@ export function getNamedItemKVPairs(form: HTMLFormElement): NamedItemKVPairs {
 function getDefaultNamedBooleanKVPairs(): NamedBooleanKVPairs {
   return {
     'keep-extension': false,
-    'max-size-enabled': true,
-    'page-sort-enabled': true,
-    'replace-enabled': false,
-    'replace-regex-enabled': false,
+    'max-size': true,
+    'page-sort': true,
+    'page-sort-natural': true,
+    'page-sort-split': true,
+    'replace': false,
+    'replace-regex': false,
   }
 }
 function getDefaultNamedNumberKVPairs(): NamedNumberKVPairs {

@@ -73,7 +73,7 @@ function getLimitedSize(
   options: NamedItemKVPairs
 ): [number, number] {
   const {
-    'max-size-enabled': enabled,
+    'max-size': enabled,
     'max-size-width': maxWidth,
     'max-size-height': maxHeight,
   } = options
