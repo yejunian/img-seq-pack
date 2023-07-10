@@ -5,6 +5,7 @@ import getNamedItemElement from './getNamedItemElement'
 import { getNamedItemKVPairs } from './NamedItemKVPairs'
 import toggleFormEditability from './toggleFormEditability'
 import ProgressUpdater from './ProgressUpdater'
+import prerenderData from './prerenderData'
 
 async function handleRootFormSubmit(
   this: HTMLFormElement,
@@ -31,7 +32,8 @@ async function handleRootFormSubmit(
     namedItemKVPairs,
     progressUpdater
   )
-  const blob = await bundleData(JSON.stringify(data), namedItemKVPairs.title)
+  const { style, markup } = prerenderData(data)
+  const blob = await bundleData(style, markup, namedItemKVPairs.title)
   downloadBlob(blob, namedItemKVPairs.title)
 
   await progressUpdater.updateProgress(1)

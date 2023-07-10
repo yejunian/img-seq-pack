@@ -8,6 +8,9 @@ class DataBuilder {
   private hashToImageIndex = new Map<string, number>()
   private images: string[] = []
   private imageIndexToFirstFileIndex: number[] = []
+  private widths: number[] = []
+  private heights: number[] = []
+
   private pageContents: number[] = []
   private pageNames: string[] = []
 
@@ -56,6 +59,8 @@ class DataBuilder {
     this.hashToImageIndex.set(hash, imageIndex)
     this.images.push(canvas.toDataURL('image/webp', this.webpQuality))
     this.imageIndexToFirstFileIndex.push(fileIndex)
+    this.widths.push(canvas.width)
+    this.heights.push(canvas.height)
 
     return imageIndex
   }
@@ -63,6 +68,8 @@ class DataBuilder {
   getData(): PackedData {
     return {
       images: [...this.images],
+      widths: [...this.widths],
+      heights: [...this.heights],
       pages: [...this.pageContents],
       names: [...this.pageNames],
     }

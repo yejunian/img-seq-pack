@@ -4,19 +4,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>[["title"]]</title>
+  <title>--{--:title;}</title>
 
-  <script type="application/json" id="data">[["data"]]</script>
+  <style>--{--:style;}</style>
   <script type="module" src="/src/template.ts"></script>
 </head>
 
 <body>
   <div id="app">
     <header>
-      <h1>[["title"]]</h1>
+      <h1>--{--:title;}</h1>
     </header>
 
-    <main id="contents"></main>
+    <main id="contents">--{--:markup;}</main>
 
     <footer>
       <ul>

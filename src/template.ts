@@ -1,9 +1,12 @@
-import getPackedData from './core/getPackedData'
-import renderImageList from './core/renderImageList'
 import './template.css'
 
 async function initialize(): Promise<void> {
-  renderImageList(await getPackedData())
+  if (import.meta.env.DEV) {
+    console.warn('Development Mode')
+
+    const renderSample = (await import('./data/renderSample')).default
+    renderSample()
+  }
 }
 
 initialize()
