@@ -11,10 +11,49 @@
 </head>
 
 <body>
+  <input type="checkbox" id="menu-open" class="conf" />
+
+  <input type="radio" id="column-count-1" class="conf" name="column-count" value="1" checked />
+  <input type="radio" id="column-count-2" class="conf" name="column-count" value="2" />
+  <input type="radio" id="column-count-3" class="conf" name="column-count" value="3" />
+  <input type="radio" id="column-count-4" class="conf" name="column-count" value="4" />
+  <input type="radio" id="column-count-5" class="conf" name="column-count" value="5" />
+  <input type="radio" id="column-count-6" class="conf" name="column-count" value="6" />
+  <input type="radio" id="column-count-7" class="conf" name="column-count" value="7" />
+  <input type="radio" id="column-count-8" class="conf" name="column-count" value="8" />
+  <input type="radio" id="column-count-9" class="conf" name="column-count" value="9" />
+  <input type="radio" id="column-count-10" class="conf" name="column-count" value="10" />
+
+  <input type="radio" id="pattern-dark" class="conf" name="transparent-pattern" value="dark" checked />
+  <input type="radio" id="pattern-light" class="conf" name="transparent-pattern" value="light" />
+
   <div id="app">
     <header>
       <h1>--{--:title;}</h1>
+      <label role="checkbox" class="button-menu" for="menu-open">메뉴</label>
     </header>
+
+    <menu>
+      <li class="config-zoom">
+        <div>확대·축소</div>
+        <ul>
+          <li><label role="radio" for="column-count-1">1열</label></li>
+          <li><label role="radio" for="column-count-2">2열</label></li>
+          <li><label role="radio" for="column-count-3">3열</label></li>
+          <li><label role="radio" for="column-count-4">4열</label></li>
+          <li><label role="radio" for="column-count-5">5열</label></li>
+          <li><label role="radio" for="column-count-6">6열</label></li>
+        </ul>
+      </li>
+
+      <li class="config-pattern">
+        <div>투명 패턴</div>
+        <ul>
+          <li><label role="radio" for="pattern-dark">다크</label></li>
+          <li><label role="radio" for="pattern-light">라이트</label></li>
+        </ul>
+      </li>
+    </menu>
 
     <main id="contents">--{--:markup;}</main>
 
