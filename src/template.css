@@ -1,5 +1,8 @@
 :root {
   --font-sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",system-ui,sans-serif;
+  --font-size:0.875rem;
+  --letter-spacing:-0.01em;
+
   --pattern-dark:url('data:image/webp;base64,UklGRjAAAABXRUJQVlA4TCMAAAAvF8AFAA/wiJlHzDxiZv7jAYTZRjM4f8sz2H8EEf0PbuAIAAA=');
   --pattern-light:url('data:image/webp;base64,UklGRjAAAABXRUJQVlA4TCMAAAAvF8AFAA9w9/e7v9/9ff4DD4TZRjM4f8sz2H8EEf0PbuAIAAA=');
 
@@ -7,6 +10,7 @@
 
   color: #fff;
   font-family: var(--font-sans);
+  letter-spacing: var(--letter-spacing);
 }
 
 body {
@@ -40,7 +44,9 @@ label:hover {
 }
 
 #app {
-  --column-count: 1;
+  --column-count-selected:1;
+  --column-count-max:4;
+  --column-count:clamp(1,var(--column-count-selected),var(--column-count-max));
 
   display: flex;
   flex-direction: column;
@@ -84,7 +90,7 @@ header h1 {
   margin: 0;
 
   line-height: 1.4;
-  font-size: 0.875rem;
+  font-size: calc(0.9375 * var(--font-size));
   font-weight: 400;
 
   overflow: hidden;
@@ -99,7 +105,7 @@ header h1 {
 
   box-sizing: border-box;
 
-  font-size: 0.875rem;
+  font-size: calc(0.9375 * var(--font-size));
 
   cursor: pointer;
 }
@@ -120,7 +126,7 @@ menu {
 
   list-style: none;
 
-  font-size: 0.875rem;
+  font-size: calc(0.9375 * var(--font-size));
 }
 #menu-open:checked ~ #app menu {
   display: flex;
@@ -142,6 +148,12 @@ menu > li > div {
   justify-content: center;
 
   padding-right: 1rem;
+}
+
+menu .config-zoom .sm,
+menu .config-zoom .md,
+menu .config-zoom .lg {
+  display: none;
 }
 
 menu ul {
@@ -186,34 +198,34 @@ main {
   gap: 0.5rem 0;
 }
 #column-count-1:checked ~ #app {
-  --column-count: 1;
+  --column-count-selected:1;
 }
 #column-count-2:checked ~ #app {
-  --column-count: 2;
+  --column-count-selected:2;
 }
 #column-count-3:checked ~ #app {
-  --column-count: 3;
+  --column-count-selected:3;
 }
 #column-count-4:checked ~ #app {
-  --column-count: 4;
+  --column-count-selected:4;
 }
 #column-count-5:checked ~ #app {
-  --column-count: 5;
+  --column-count-selected:5;
 }
 #column-count-6:checked ~ #app {
-  --column-count: 6;
+  --column-count-selected:6;
 }
 #column-count-7:checked ~ #app {
-  --column-count: 7;
+  --column-count-selected:7;
 }
 #column-count-8:checked ~ #app {
-  --column-count: 8;
+  --column-count-selected:8;
 }
 #column-count-9:checked ~ #app {
-  --column-count: 9;
+  --column-count-selected:9;
 }
 #column-count-10:checked ~ #app {
-  --column-count: 10;
+  --column-count-selected:10;
 }
 
 article {
@@ -229,7 +241,7 @@ h2 {
 
   white-space: nowrap;
   text-overflow: clip;
-  font-size: 1rem;
+  font-size: var(--font-size);
   font-weight: 400;
 }
 
@@ -244,7 +256,7 @@ article div {
 }
 
 article div.hydrated {
-  --i: none;
+  --i:none;
 
   padding: 0;
 }
@@ -265,7 +277,7 @@ footer {
   flex: 0 0;
 
   text-align: center;
-  font-size: 0.875rem;
+  font-size: calc(0.8125 * var(--font-size));
 
   opacity: 0.6;
 }
@@ -281,4 +293,49 @@ footer ul {
 
   list-style: none;
   line-height: 1;
+}
+
+@media (min-width: 375px) {
+  #app {
+    --column-count-max:6;
+  }
+
+  menu .config-zoom .sm {
+    display: flex;
+  }
+}
+
+@media (min-width: 540px) {
+  :root {
+    --letter-spacing:normal;
+  }
+
+  #app {
+    --column-count-max:8;
+  }
+
+  menu .config-zoom .md {
+    display: flex;
+  }
+}
+
+@media (min-width: 720px) {
+  :root {
+    --font-size:0.9375rem;
+  }
+
+  #app {
+    --column-count-max:10;
+  }
+
+  menu .config-zoom .lg {
+    display: flex;
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --font-size:1rem;
+  }
+
 }
