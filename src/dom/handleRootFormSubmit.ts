@@ -1,11 +1,8 @@
-import buildData from './buildData'
-import bundleData from './bundleData'
-import downloadBlob from './downloadBlob'
+import buildDocument from '../core/buildDocument'
+import getMainOptions from './getMainOptions'
 import getNamedItemElement from './getNamedItemElement'
-import { getNamedItemKVPairs } from './NamedItemKVPairs'
-import toggleFormEditability from './toggleFormEditability'
 import ProgressUpdater from './ProgressUpdater'
-import prerenderData from './prerenderData'
+import toggleFormEditability from './toggleFormEditability'
 
 async function handleRootFormSubmit(
   this: HTMLFormElement,
@@ -25,16 +22,9 @@ async function handleRootFormSubmit(
     throw new Error('No file is selected.')
   }
 
-  const namedItemKVPairs = getNamedItemKVPairs(this)
+  const mainOptions = getMainOptions(this)
 
-  const data = await buildData(
-    filesElement.files,
-    namedItemKVPairs,
-    progressUpdater
-  )
-  const { style, markup } = prerenderData(data)
-  const blob = await bundleData(style, markup, namedItemKVPairs.title)
-  downloadBlob(blob, namedItemKVPairs.title)
+  await buildDocument(filesElement.files, mainOptions, progressUpdater)
 
   await progressUpdater.updateProgress(1)
   toggleFormEditability(this, true)

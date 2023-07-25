@@ -1,4 +1,4 @@
-import { PageMetadataEntry } from './PageMetadata'
+import type { PageMetadataEntry } from './PageMetadata'
 import splitFilename from './splitFilename'
 
 type CompareFunction = (a: string, b: string) => number

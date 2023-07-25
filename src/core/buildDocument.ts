@@ -1,20 +1,28 @@
 import sha1 from 'hash.js/lib/hash/sha/1'
-import type PackedData from './PackedData'
+import type ProgressUpdater from '../dom/ProgressUpdater'
 import decodeImage from './decodeImage'
-import { NamedItemKVPairs } from './NamedItemKVPairs'
-import DataBuilder from './DataBuilder'
-import ProgressUpdater from './ProgressUpdater'
-import buildPageMetadata from './buildPageMetadata'
+import DocumentBuilder from './DocumentBuilder'
+import type { MainOptions } from './MainOptions'
+import { buildPageMetadata } from './PageMetadata'
 
 const imageDataKeys: (keyof ImageData)[] = ['width', 'height', 'data']
 
-async function buildData(
+async function buildDocument(
   fileList: FileList,
-  options: NamedItemKVPairs,
+  options: MainOptions,
   progressUpdater?: ProgressUpdater
-): Promise<PackedData> {
+): Promise<void> {
   const pageMetadata = buildPageMetadata(fileList, options)
-  const builder = new DataBuilder(options)
+  const builder = new DocumentBuilder({
+    filename: options['title'],
+    width: options['page-width'],
+    height: options['page-height'],
+    enlargeImage: options['image-enlarge'],
+    jpegQuality: options['quality-jpeg'] / 100,
+    backgroundColor: options['background-color'],
+    pageNumber: options['page-number'],
+    pageDescription: options['page-description'],
+  })
 
   for (let i = 0; i < pageMetadata.length; i += 1) {
     const file = fileList[pageMetadata[i].fileIndex]
@@ -22,10 +30,11 @@ async function buildData(
     const canvas = await decodeImage(file, options)
     const looseHash = hashImageData(getImageData(canvas, 64, 64))
 
+    let imageIndex: number
     if (builder.hasHash(looseHash)) {
-      const imageIndex = builder.getImageIndex(looseHash)
+      imageIndex = builder.getImageIndex(looseHash)
 
-      if (imageIndex !== DataBuilder.IMAGE_INDEX_TO_COLLISION) {
+      if (imageIndex !== DocumentBuilder.IMAGE_INDEX_TO_COLLISION) {
         const fileIndex = builder.getFirstFileIndex(imageIndex)
         const priorCanvas = await decodeImage(fileList[fileIndex], options)
         const priorImageData = getImageData(priorCanvas)
@@ -37,25 +46,24 @@ async function buildData(
       const currentFullHash = hashImageData(getImageData(canvas))
 
       if (builder.hasHash(currentFullHash)) {
-        const imageIndex = builder.getImageIndex(currentFullHash)
-        builder.addPage(imageIndex, pageMetadata[i].name)
+        imageIndex = builder.getImageIndex(currentFullHash)
       } else {
-        const imageIndex = builder.registerHashAndCreateData(
-          currentFullHash,
-          canvas,
-          i
-        )
-        builder.addPage(imageIndex, pageMetadata[i].name)
+        imageIndex = await builder.registerImage(canvas, i)
+        builder.registerHash(currentFullHash, imageIndex)
       }
     } else {
-      const imageIndex = builder.registerHashAndCreateData(looseHash, canvas, i)
-      builder.addPage(imageIndex, pageMetadata[i].name)
+      imageIndex = await builder.registerImage(canvas, i)
+      builder.registerHash(looseHash, imageIndex)
     }
+    builder.addPage(imageIndex, {
+      pageNumber: i + options['page-number-start'],
+      description: pageMetadata[i].name,
+    })
 
-    await progressUpdater?.updateProgress((i + 1) / fileList.length)
+    await progressUpdater?.updateProgress((i + 1) / (fileList.length + 1))
   }
 
-  return builder.getData()
+  builder.download()
 }
 
 function getImageData(
@@ -99,4 +107,4 @@ function hashImageData(imageData: ImageData): string {
   return sha1().update(hashes).digest('hex')
 }
 
-export default buildData
+export default buildDocument

@@ -1,5 +1,5 @@
-import { NamedItemKVPairs } from './NamedItemKVPairs'
 import TgaLoader from 'tga-js'
+import type { MainOptions } from './MainOptions'
 
 const decodableTypePatterns = {
   ImageBitmap: /^image\/(?:avif|gif|jpeg|png|webp)$/,
@@ -8,7 +8,7 @@ const decodableTypePatterns = {
 
 async function decodeImage(
   file: File,
-  options: NamedItemKVPairs
+  options: MainOptions
 ): Promise<HTMLCanvasElement> {
   if (decodableTypePatterns.ImageBitmap.test(file.type)) {
     return await decodeByImageBitmap(file, options)
@@ -22,7 +22,7 @@ async function decodeImage(
 
 async function decodeByImageBitmap(
   file: File,
-  options: NamedItemKVPairs
+  options: MainOptions
 ): Promise<HTMLCanvasElement> {
   const imageBitmap = await window.createImageBitmap(file)
   const canvas = getCanvasFromImageBitmap(imageBitmap, options)
@@ -33,7 +33,7 @@ async function decodeByImageBitmap(
 
 async function decodeByTgaLoader(
   file: File,
-  options: NamedItemKVPairs
+  options: MainOptions
 ): Promise<HTMLCanvasElement> {
   const imageBitmap = await window.createImageBitmap(
     await decodeTargaIntoImageData(file)
@@ -52,7 +52,7 @@ async function decodeTargaIntoImageData(file: File): Promise<ImageData> {
 
 function getCanvasFromImageBitmap(
   imageBitmap: ImageBitmap,
-  options: NamedItemKVPairs
+  options: MainOptions
 ): HTMLCanvasElement {
   const [width, height] = getLimitedSize(
     imageBitmap.width,
@@ -73,25 +73,21 @@ function getCanvasFromImageBitmap(
 function getLimitedSize(
   width: number,
   height: number,
-  options: NamedItemKVPairs
+  options: MainOptions
 ): [number, number] {
-  const {
-    'max-size': enabled,
-    'max-size-width': maxWidth,
-    'max-size-height': maxHeight,
-  } = options
+  const { 'page-width': pageWidth, 'page-height': pageHeight } = options
 
-  if (!enabled || (width <= maxWidth && height <= maxHeight)) {
+  if (width <= pageWidth && height <= pageHeight) {
     return [width, height]
   }
 
   const sourceRatio = width / height
-  const maxRatio = maxWidth / maxHeight
+  const pageRatio = pageWidth / pageHeight
 
-  if (sourceRatio >= maxRatio) {
-    return [maxWidth, maxWidth / sourceRatio]
+  if (sourceRatio >= pageRatio) {
+    return [pageWidth, pageWidth / sourceRatio]
   } else {
-    return [maxHeight * sourceRatio, maxHeight]
+    return [pageHeight * sourceRatio, pageHeight]
   }
 }
 

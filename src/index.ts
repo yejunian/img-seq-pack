@@ -1,6 +1,6 @@
-import handleFilesChange from './core/handleFilesChange'
-import handleRootFormSubmit from './core/handleRootFormSubmit'
-import strictQuerySelector from './core/strictQuerySelector'
+import handleFilesChange from './dom/handleFilesChange'
+import handleRootFormSubmit from './dom/handleRootFormSubmit'
+import strictQuerySelector from './dom/strictQuerySelector'
 import './index.css'
 
 function initialize(): void {
