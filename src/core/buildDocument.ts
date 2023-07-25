@@ -2,6 +2,7 @@ import sha1 from 'hash.js/lib/hash/sha/1'
 import type ProgressUpdater from '../dom/ProgressUpdater'
 import decodeImage from './decodeImage'
 import DocumentBuilder from './DocumentBuilder'
+import getFont from './getFont'
 import type { MainOptions } from './MainOptions'
 import { buildPageMetadata } from './PageMetadata'
 
@@ -23,6 +24,7 @@ async function buildDocument(
     pageNumber: options['page-number'],
     pageDescription: options['page-description'],
   })
+  builder.addAndSetFont('SUIT-ExtraBold.ttf', await getFont(), 'SUIT', '', 800)
 
   for (let i = 0; i < pageMetadata.length; i += 1) {
     const file = fileList[pageMetadata[i].fileIndex]

@@ -90,7 +90,7 @@ class DocumentBuilder {
     const pageHeight = this.options.height + this.descriptionHeight
 
     this.pageNumberFontSize = (3 / 32) * this.shortSide // 9.375vmin
-    this.pageNumberLineWidth = (1 / 64) * this.shortSide // 1.5625vmin
+    this.pageNumberLineWidth = (5 / 256) * this.shortSide // 1.953125vmin
     this.pageNumberPosition = [
       (15 / 16) * this.options.width, // 93.75vw
       (1 / 16) * this.options.height + this.descriptionHeight, // 6.25vh
@@ -102,8 +102,7 @@ class DocumentBuilder {
       unit: 'pt',
       format: [this.options.width, pageHeight],
     })
-      .deletePage(1)
-      .setFont('Helvetica', '', 'Bold')
+    this.doc.deletePage(1)
   }
 
   private overrideOptions({
@@ -147,18 +146,38 @@ class DocumentBuilder {
     }
   }
 
+  addAndSetFont(
+    filename: string,
+    base64Content: string,
+    fontName: string,
+    fontStyle: string,
+    fontWeight: number | string
+  ): void {
+    if (filename && base64Content && fontName) {
+      this.doc
+        .addFileToVFS(filename, base64Content)
+        .addFont(filename, fontName, fontStyle, fontWeight)
+      this.doc.setFont(fontName, fontStyle, fontWeight)
+    } else {
+      this.doc.setFont('Helvetica', '', 'Bold')
+    }
+  }
+
   hasHash(hash: string): boolean {
     return this.hashToImageIndex.has(hash)
   }
 
   hasHashWithCollision(hash: string): boolean {
     return (
-      this.hashToImageIndex.get(hash) === DocumentBuilder.IMAGE_INDEX_TO_COLLISION
+      this.hashToImageIndex.get(hash) ===
+      DocumentBuilder.IMAGE_INDEX_TO_COLLISION
     )
   }
 
   getImageIndex(hash: string): number {
-    return this.hashToImageIndex.get(hash) ?? DocumentBuilder.IMAGE_INDEX_TO_INVALID
+    return (
+      this.hashToImageIndex.get(hash) ?? DocumentBuilder.IMAGE_INDEX_TO_INVALID
+    )
   }
 
   getFirstFileIndex(imageIndex: number): number {
@@ -207,13 +226,15 @@ class DocumentBuilder {
       this.doc
         .setFontSize(this.pageNumberFontSize)
         .setLineWidth(this.pageNumberLineWidth)
+        .setLineJoin('round')
         .setDrawColor(DocumentBuilder.COLOR_WHITE)
-        .setTextColor(DocumentBuilder.COLOR_BLACK)
+        .setTextColor(DocumentBuilder.COLOR_WHITE)
         .text(
           `${pageNumber}`,
           ...this.pageNumberPosition,
           DocumentBuilder.PAGE_NUMBER_OPTIONS_STROKE
         )
+        .setTextColor(DocumentBuilder.COLOR_BLACK)
         .text(
           `${pageNumber}`,
           ...this.pageNumberPosition,
