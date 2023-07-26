@@ -12,7 +12,7 @@ async function buildDocument(
   fileList: FileList,
   options: MainOptions,
   progressUpdater?: ProgressUpdater
-): Promise<void> {
+): Promise<boolean> {
   const pageMetadata = buildPageMetadata(fileList, options)
   const builder = new DocumentBuilder({
     filename: options['title'],
@@ -29,7 +29,16 @@ async function buildDocument(
   for (let i = 0; i < pageMetadata.length; i += 1) {
     const file = fileList[pageMetadata[i].fileIndex]
 
-    const canvas = await decodeImage(file, options)
+    let canvas: HTMLCanvasElement
+    try {
+      canvas = await decodeImage(file, options)
+    } catch (error) {
+      console.error(error)
+      await progressUpdater?.cancel((i + 1) / (fileList.length + 1))
+      alert(`"${file.name}" 파일을 읽을 수 없습니다.`)
+      return false
+    }
+
     const looseHash = hashImageData(getImageData(canvas, 64, 64))
 
     let imageIndex: number
@@ -62,10 +71,12 @@ async function buildDocument(
       description: pageMetadata[i].name,
     })
 
-    await progressUpdater?.updateProgress((i + 1) / (fileList.length + 1))
+    await progressUpdater?.update((i + 1) / (fileList.length + 1))
   }
 
   builder.download()
+
+  return true
 }
 
 function getImageData(

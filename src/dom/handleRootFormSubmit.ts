@@ -24,9 +24,10 @@ async function handleRootFormSubmit(
   const mainOptions = getMainOptions(this)
 
   const buildDocument = (await import('../core/buildDocument')).default
-  await buildDocument(filesElement.files, mainOptions, progressUpdater)
+  if (await buildDocument(filesElement.files, mainOptions, progressUpdater)) {
+    await progressUpdater.complete()
+  }
 
-  await progressUpdater.updateProgress(1)
   toggleFormEditability(this, true)
 }
 

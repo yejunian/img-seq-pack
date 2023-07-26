@@ -1,7 +1,7 @@
 import strictQuerySelector from './strictQuerySelector'
 
 class ProgressUpdater {
-  private progressElement: HTMLElement
+  private progressElement: HTMLProgressElement
   private descriptionElement: HTMLElement
   private begin: number
 
@@ -11,12 +11,29 @@ class ProgressUpdater {
     this.begin = Date.now()
   }
 
-  async updateProgress(progress: number): Promise<void> {
+  async update(progress: number): Promise<void> {
     const percentage = Math.floor(progress * 100)
     const seconds = Math.ceil((Date.now() - this.begin) / 1000)
 
-    this.progressElement.setAttribute('value', progress.toString(10))
+    this.progressElement.value = progress
     this.descriptionElement.textContent = `${percentage}% (${seconds}초)`
+
+    await Promise.resolve()
+  }
+
+  async complete(): Promise<void> {
+    const seconds = Math.ceil((Date.now() - this.begin) / 1000)
+
+    this.progressElement.value = 1
+    this.descriptionElement.textContent = `완료 (${seconds}초)`
+
+    await Promise.resolve()
+  }
+
+  async cancel(progress: number): Promise<void> {
+    await this.update(progress)
+    this.descriptionElement.textContent =
+      '취소됨: ' + (this.descriptionElement.textContent ?? '')
 
     await Promise.resolve()
   }
@@ -27,7 +44,7 @@ class ProgressUpdater {
     progress: number
   ): Promise<ProgressUpdater> {
     const updater = new ProgressUpdater(progressSelector, descriptionSelector)
-    await updater.updateProgress(progress)
+    await updater.update(progress)
 
     return updater
   }
