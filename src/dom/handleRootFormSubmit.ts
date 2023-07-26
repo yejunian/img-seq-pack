@@ -1,4 +1,3 @@
-import buildDocument from '../core/buildDocument'
 import getMainOptions from './getMainOptions'
 import getNamedItemElement from './getNamedItemElement'
 import ProgressUpdater from './ProgressUpdater'
@@ -24,6 +23,7 @@ async function handleRootFormSubmit(
 
   const mainOptions = getMainOptions(this)
 
+  const buildDocument = (await import('../core/buildDocument')).default
   await buildDocument(filesElement.files, mainOptions, progressUpdater)
 
   await progressUpdater.updateProgress(1)
