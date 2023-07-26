@@ -1,34 +1,27 @@
 import TgaLoader from 'tga-js'
 import type { MainOptions } from './MainOptions'
 
-const decodableTypePatterns = {
-  ImageBitmap: /^image\/(?:avif|gif|jpeg|png|webp)$/,
-  TgaLoader: /^(?:application|image)\/(?:x-)?(?:targa|tga)$/,
-}
-
 async function decodeImage(
   file: File,
   options: MainOptions
 ): Promise<HTMLCanvasElement> {
-  if (decodableTypePatterns.ImageBitmap.test(file.type)) {
-    return await decodeByImageBitmap(file, options)
-  } else if (decodableTypePatterns.TgaLoader.test(file.type)) {
-    return decodeByTgaLoader(file, options)
-  } else {
-    const extension = file.name.replace(/^.+\.(.+?)$/, '$1')
-    throw new Error(`*.${extension} (${file.type}) is not supported.`)
+  try {
+    if (isTGAFile(file)) {
+      return decodeByTgaLoader(file, options)
+    } else {
+      return await decodeByImageBitmap(file, options)
+    }
+  } catch (error) {
+    console.warn(`${file.type} file will be decoded by fallback method.`)
+    return await decodeByHTMLImageElement(file, options)
   }
 }
 
-async function decodeByImageBitmap(
-  file: File,
-  options: MainOptions
-): Promise<HTMLCanvasElement> {
-  const imageBitmap = await window.createImageBitmap(file)
-  const canvas = getCanvasFromImageBitmap(imageBitmap, options)
-  imageBitmap.close()
-
-  return canvas
+function isTGAFile(file: File): boolean {
+  return (
+    file.name.toLowerCase().endsWith('.tga') ||
+    /^(?:application|image)\/(?:x-)?(?:targa|tga)$/i.test(file.type)
+  )
 }
 
 async function decodeByTgaLoader(
@@ -48,6 +41,39 @@ async function decodeTargaIntoImageData(file: File): Promise<ImageData> {
   const tga = new TgaLoader()
   tga.load(new Uint8Array(await file.arrayBuffer()))
   return tga.getImageData()
+}
+
+async function decodeByImageBitmap(
+  file: File,
+  options: MainOptions
+): Promise<HTMLCanvasElement> {
+  const imageBitmap = await window.createImageBitmap(file)
+  const canvas = getCanvasFromImageBitmap(imageBitmap, options)
+  imageBitmap.close()
+
+  return canvas
+}
+
+async function decodeByHTMLImageElement(
+  file: File,
+  options: MainOptions
+): Promise<HTMLCanvasElement> {
+  const imageURL = URL.createObjectURL(file)
+
+  const img = document.createElement('img')
+  await new Promise<void>((resolve, reject) => {
+    img.onload = () => resolve()
+    img.onerror = () => reject()
+    img.src = imageURL
+  })
+
+  const imageBitmap = await window.createImageBitmap(img)
+  URL.revokeObjectURL(imageURL)
+
+  const canvas = getCanvasFromImageBitmap(imageBitmap, options)
+  imageBitmap.close()
+
+  return canvas
 }
 
 function getCanvasFromImageBitmap(
