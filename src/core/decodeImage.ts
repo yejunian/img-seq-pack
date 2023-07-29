@@ -8,11 +8,20 @@ async function decodeImage(
   try {
     if (isTGAFile(file)) {
       return decodeByTgaLoader(file, options)
-    } else {
-      return await decodeByImageBitmap(file, options)
+    } else if (isSVGFile(file)) {
+      const scaledSVGBlob = await get4xScaledSVGBlob(file)
+      return await decodeByHTMLImageElement(scaledSVGBlob, options)
     }
   } catch (error) {
-    console.warn(`${file.type} file will be decoded by fallback method.`)
+    console.error(error)
+    console.warn(`Failed to decode "${file.name}" as "${file.type}" type`)
+  }
+
+  try {
+    return await decodeByImageBitmap(file, options)
+  } catch (error) {
+    console.error(error)
+    console.warn(`"${file.type}" type file will be decoded by fallback method.`)
     return await decodeByHTMLImageElement(file, options)
   }
 }
@@ -24,12 +33,19 @@ function isTGAFile(file: File): boolean {
   )
 }
 
+function isSVGFile(file: File): boolean {
+  return (
+    file.name.toLowerCase().endsWith('.svg') ||
+    file.type.toLowerCase().includes('image/svg+xml')
+  )
+}
+
 async function decodeByTgaLoader(
-  file: File,
+  blob: Blob,
   options: MainOptions
 ): Promise<HTMLCanvasElement> {
   const imageBitmap = await window.createImageBitmap(
-    await decodeTargaIntoImageData(file)
+    await decodeTargaIntoImageData(blob)
   )
   const canvas = getCanvasFromImageBitmap(imageBitmap, options)
   imageBitmap.close()
@@ -37,17 +53,38 @@ async function decodeByTgaLoader(
   return canvas
 }
 
-async function decodeTargaIntoImageData(file: File): Promise<ImageData> {
+async function decodeTargaIntoImageData(blob: Blob): Promise<ImageData> {
   const tga = new TgaLoader()
-  tga.load(new Uint8Array(await file.arrayBuffer()))
+  tga.load(new Uint8Array(await blob.arrayBuffer()))
   return tga.getImageData()
 }
 
+async function get4xScaledSVGBlob(file: File): Promise<Blob> {
+  const svgElement = new DOMParser()
+    .parseFromString(await file.text(), 'image/svg+xml')
+    .getElementsByTagNameNS('http://www.w3.org/2000/svg', 'svg')[0]
+
+  if (svgElement.getAttribute('width') && svgElement.getAttribute('height')) {
+    return file
+  }
+
+  const viewBox = svgElement.getAttribute('viewBox')
+  if (!viewBox) {
+    throw new Error(`Cannot read the dimension of "${file.name}"`)
+  }
+
+  const [, , width, height] = viewBox.trim().split(/\s+/)
+  svgElement.setAttribute('width', width)
+  svgElement.setAttribute('height', height)
+
+  return new Blob([svgElement.outerHTML], { type: 'image/svg+xml' })
+}
+
 async function decodeByImageBitmap(
-  file: File,
+  blob: Blob,
   options: MainOptions
 ): Promise<HTMLCanvasElement> {
-  const imageBitmap = await window.createImageBitmap(file)
+  const imageBitmap = await window.createImageBitmap(blob)
   const canvas = getCanvasFromImageBitmap(imageBitmap, options)
   imageBitmap.close()
 
@@ -55,10 +92,10 @@ async function decodeByImageBitmap(
 }
 
 async function decodeByHTMLImageElement(
-  file: File,
+  blob: Blob,
   options: MainOptions
 ): Promise<HTMLCanvasElement> {
-  const imageURL = URL.createObjectURL(file)
+  const imageURL = URL.createObjectURL(blob)
 
   const img = document.createElement('img')
   await new Promise<void>((resolve, reject) => {
