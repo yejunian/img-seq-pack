@@ -1,5 +1,5 @@
 const fontURL =
-  'https://cdn.jsdelivr.net/gh/sunn-us/SUIT@2.0.1/fonts/static/ttf/SUIT-ExtraBold.ttf'
+  'https://cdn.jsdelivr.net/gh/sunn-us/SUIT@1.2.5/fonts/static/ttf/SUIT-ExtraBold.ttf'
 
 let cached = ''
 
