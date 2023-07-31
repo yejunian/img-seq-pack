@@ -15,12 +15,13 @@ async function handlePackButtonClick(this: HTMLButtonElement): Promise<void> {
     progressUpdater.cancel()
     progressUpdater = null
   } else {
-    toggleFormEditability(form, false)
-
     const filesElement = getNamedItemElement(form, 'files')
-    if (!filesElement.files || filesElement.files.length === 0) {
-      throw new Error('No file is selected.')
+    if (!filesElement?.files?.length) {
+      form.reportValidity()
+      return
     }
+
+    toggleFormEditability(form, false)
 
     const mainOptions = getMainOptions(form)
 

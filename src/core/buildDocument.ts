@@ -37,7 +37,6 @@ async function buildDocument(
     try {
       canvas = await decodeImage(file, options)
     } catch (error) {
-      console.error(error)
       await progressUpdater?.cancel()
       alert(`"${file.name}" 파일을 읽을 수 없습니다.`)
       return false
