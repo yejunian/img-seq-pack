@@ -26,6 +26,10 @@ async function buildDocument(
   })
   builder.addAndSetFont('SUIT-ExtraBold.ttf', await getFont(), 'SUIT', '', 800)
 
+  if (progressUpdater && !(await progressUpdater.reset(0))) {
+    return false
+  }
+
   for (let i = 0; i < pageMetadata.length; i += 1) {
     const file = fileList[pageMetadata[i].fileIndex]
 
@@ -34,7 +38,7 @@ async function buildDocument(
       canvas = await decodeImage(file, options)
     } catch (error) {
       console.error(error)
-      await progressUpdater?.cancel((i + 1) / (fileList.length + 1))
+      await progressUpdater?.cancel()
       alert(`"${file.name}" 파일을 읽을 수 없습니다.`)
       return false
     }
@@ -71,7 +75,12 @@ async function buildDocument(
       description: pageMetadata[i].name,
     })
 
-    await progressUpdater?.update((i + 1) / (fileList.length + 1))
+    if (
+      progressUpdater &&
+      !(await progressUpdater.update((i + 1) / (fileList.length + 1)))
+    ) {
+      return false
+    }
   }
 
   builder.download()

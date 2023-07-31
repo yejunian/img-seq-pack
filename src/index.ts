@@ -1,11 +1,16 @@
 import handleFilesChange from './dom/handleFilesChange'
-import handleRootFormSubmit from './dom/handleRootFormSubmit'
+import handlePackButtonClick from './dom/handlePackButtonClick'
 import strictQuerySelector from './dom/strictQuerySelector'
 import './index.css'
 
 function initialize(): void {
   const rootForm = strictQuerySelector<HTMLFormElement>(document, '#app')
-  rootForm.addEventListener('submit', handleRootFormSubmit)
+
+  const packButton = rootForm.elements.namedItem('button-pack')
+  if (!packButton || !(packButton instanceof HTMLButtonElement)) {
+    throw new Error('"button-pack" as HTMLButtonElement is not found.')
+  }
+  packButton.addEventListener('click', handlePackButtonClick)
 
   const filesInput = rootForm.elements.namedItem('files')
   if (!filesInput || !(filesInput instanceof HTMLInputElement)) {
