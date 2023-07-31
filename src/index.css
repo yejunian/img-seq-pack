@@ -51,6 +51,7 @@ h2 {
 }
 
 ul {
+  margin: 0;
   padding-left: 0;
 
   list-style: none;
@@ -63,14 +64,14 @@ ul {
 }
 
 #file-list summary {
-  padding: 1rem;
+  padding: 0.5rem 0.75rem;
 }
 
 #file-list ol {
   margin: 0;
   border-top: 1px solid #a0a0a0;
-  padding: 1rem 1rem 1rem 4rem;
-  max-height: 10vh;
+  padding: 0.5rem 0.75rem 0.5rem 4rem;
+  height: max(15vh, 100px);
 
   overflow-y: auto;
 }
@@ -78,11 +79,11 @@ ul {
 #file-list li {
   font-family: Menlo, 'Cascadia Mono', 'Cascadia Code', Consolas, 'Courier New',
     Courier, system-ui, monospace;
-  font-size: 0.9em;
+  font-size: 0.875rem;
 }
 
 #file-list ol:empty {
-  padding: 1rem;
+  padding: 0.5rem 0.75rem 0.5rem 2rem;
   list-style: none;
 }
 
@@ -164,8 +165,15 @@ ul {
 }
 
 .pack {
+  position: sticky;
+  bottom: 0;
+
   display: flex;
   gap: 1.5rem;
+
+  margin: -1rem 0 -1.5rem;
+  padding: 1rem 0 1.5rem;
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 .pack-button-container {
@@ -191,4 +199,25 @@ ul {
 .pack-progress-container > * {
   display: block;
   width: 100%;
+}
+
+footer {
+  margin-top: 3rem;
+  padding-bottom: 1.5rem;
+
+  color: #606060;
+  font-size: 0.875rem;
+}
+
+footer a {
+  color: #087aa3;
+}
+footer a:hover {
+  text-decoration: none;
+}
+
+footer ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
