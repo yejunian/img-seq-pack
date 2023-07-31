@@ -1,3 +1,4 @@
+import handleBodyDrop from './dom/handleBodyDrop'
 import handleFilesChange from './dom/handleFilesChange'
 import handlePackButtonClick from './dom/handlePackButtonClick'
 import strictQuerySelector from './dom/strictQuerySelector'
@@ -17,6 +18,9 @@ function initialize(): void {
     throw new Error('"files" as HTMLInputElement is not found.')
   }
   filesInput.addEventListener('change', handleFilesChange)
+
+  document.body.addEventListener('dragover', (event) => event.preventDefault())
+  document.body.addEventListener('drop', handleBodyDrop)
 }
 
 initialize()

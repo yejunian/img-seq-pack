@@ -1,26 +1,15 @@
-import strictQuerySelector from './strictQuerySelector'
+import filterFiles from '../core/filterFiles'
+import alertFilterResult from './alertFilterResult'
+import updateSelectedFileList from './updateSelectedFileList'
 
 function handleFilesChange(this: HTMLInputElement): void {
-  const olElement = strictQuerySelector<HTMLOListElement>(
-    document,
-    '#file-list ol'
-  )
-
-  if (!this.files || this.files.length === 0) {
-    for (const child of olElement.children) {
-      child.remove()
-    }
-  } else {
-    const liElements = []
-
-    for (const { name } of this.files) {
-      const liElement = document.createElement('li')
-      liElement.textContent = name
-      liElements.push(liElement)
-    }
-
-    olElement.replaceChildren(...liElements)
+  const filtered = filterFiles(this.files ?? new FileList())
+  if (filtered.discardedCount) {
+    alertFilterResult(filtered)
   }
+
+  this.files = filtered.files
+  updateSelectedFileList(filtered.files)
 }
 
 export default handleFilesChange

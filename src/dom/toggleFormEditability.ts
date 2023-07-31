@@ -14,9 +14,9 @@ function toggleFormEditability(form: HTMLFormElement, activate: boolean): void {
   }
 
   if (activate) {
-    form.classList.remove('packing')
+    document.body.classList.remove('packing')
   } else {
-    form.classList.add('packing')
+    document.body.classList.add('packing')
   }
 }
 
