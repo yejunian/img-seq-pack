@@ -19,7 +19,7 @@ class ProgressUpdater {
     }
 
     const percentage = Math.floor(progress * 100)
-    const seconds = Math.ceil((Date.now() - this.begin) / 1000)
+    const seconds = Math.floor((Date.now() - this.begin) / 1000)
 
     this.progressElement.value = progress
     this.descriptionElement.textContent = `${percentage}% (${seconds}초)`
