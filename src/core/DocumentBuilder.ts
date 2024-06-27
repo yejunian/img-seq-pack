@@ -57,7 +57,7 @@ class DocumentBuilder {
 
   private hashToImageIndex = new Map<string, number>()
   private images: ImageInfo[] = []
-  private imageIndexToFirstFileIndex: number[] = []
+  private imageIndexToFirstPageIndex: number[] = []
 
   private doc: jsPDF
 
@@ -180,8 +180,8 @@ class DocumentBuilder {
     )
   }
 
-  getFirstFileIndex(imageIndex: number): number {
-    return this.imageIndexToFirstFileIndex[imageIndex]
+  getFirstPageIndex(imageIndex: number): number {
+    return this.imageIndexToFirstPageIndex[imageIndex]
   }
 
   replaceCollidingHash(oldHash: string, newHash: string): void {
@@ -245,12 +245,12 @@ class DocumentBuilder {
 
   async registerImage(
     canvas: HTMLCanvasElement,
-    fileIndex: number
+    pageIndex: number
   ): Promise<number> {
     const imageIndex = this.images.length
 
     this.images.push(await this.getImageInfo(canvas))
-    this.imageIndexToFirstFileIndex.push(fileIndex)
+    this.imageIndexToFirstPageIndex.push(pageIndex)
 
     return imageIndex
   }

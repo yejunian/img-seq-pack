@@ -49,8 +49,11 @@ async function buildDocument(
       imageIndex = builder.getImageIndex(looseHash)
 
       if (imageIndex !== DocumentBuilder.IMAGE_INDEX_TO_COLLISION) {
-        const fileIndex = builder.getFirstFileIndex(imageIndex)
-        const priorCanvas = await decodeImage(fileList[fileIndex], options)
+        const pageIndex = builder.getFirstPageIndex(imageIndex)
+        const priorCanvas = await decodeImage(
+          fileList[pageMetadata[pageIndex].fileIndex],
+          options
+        )
         const priorImageData = getImageData(priorCanvas)
         const priorFullHash = hashImageData(priorImageData)
 
