@@ -12,14 +12,14 @@
   },
   "devDependencies": {
     "gh-pages": "^6.1.1",
-    "typescript": "^5.4.5",
-    "vite": "^5.3.1",
-    "vite-plugin-minify": "^1.5.2"
+    "typescript": "^5.6.2",
+    "vite": "^5.4.6",
+    "vite-plugin-minify": "^2.0.0"
   },
   "dependencies": {
     "browser-image-compression": "^2.0.2",
     "hash.js": "^1.1.7",
-    "jspdf": "^2.5.1",
+    "jspdf": "^2.5.2",
     "tga-js": "^1.1.1"
   }
 }
