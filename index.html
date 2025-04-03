@@ -13,10 +13,7 @@
 
     <h2>1. 이미지 파일 선택</h2>
     <input type="file" name="files" accept="image/jpeg,image/png,image/gif,image/webp,image/avif,image/svg+xml,image/targa" multiple required />
-    <details id="file-list">
-      <summary>선택한 파일 목록 (펼치기·접기)</summary>
-      <ol></ol>
-    </details>
+    <ol id="file-list"></ol>
 
     <h2>2. 옵션</h2>
     <ul class="options">
@@ -119,7 +116,7 @@
 
             <ul class="option-values-sub">
               <li>
-                <input type="number" name="page-number-start" value="1" min="0" />
+                <input type="number" name="page-number-start" value="1" min="0" max="999999" />
               </li>
             </ul>
           </li>
@@ -178,16 +175,18 @@
     </ul>
 
     <h2>3. 변환</h2>
-    <ul class="pack">
-      <li class="pack-button-container">
-        <button type="button" id="button-pack">변환하기</button>
-      </li>
+    <section class="sticky-bottom">
+      <ul class="pack">
+        <li class="pack-button-container">
+          <button type="button" id="button-pack">변환하기</button>
+        </li>
 
-      <li class="pack-progress-container">
-        <progress id="pack-progress" value="0" min="1"></progress>
-        <div id="pack-description">변환 진행 전</div>
-      </li>
-    </ul>
+        <li class="pack-progress-container">
+          <progress id="pack-progress" value="0" min="1"></progress>
+          <div id="pack-description">변환 진행 전</div>
+        </li>
+      </ul>
+    </section>
 
     <footer>
       <ul>

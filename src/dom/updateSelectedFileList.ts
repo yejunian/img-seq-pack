@@ -3,7 +3,7 @@ import strictQuerySelector from './strictQuerySelector'
 function updateSelectedFileList(files?: FileList | null): void {
   const olElement = strictQuerySelector<HTMLOListElement>(
     document,
-    '#file-list ol'
+    '#file-list'
   )
 
   if (!files || files.length === 0) {
