@@ -15,8 +15,8 @@ importers:
         specifier: ^1.1.7
         version: 1.1.7
       jspdf:
-        specifier: ^3.0.2
-        version: 3.0.2
+        specifier: ^3.0.3
+        version: 3.0.3
       tga-js:
         specifier: ^1.1.1
         version: 1.1.1
@@ -25,14 +25,14 @@ importers:
         specifier: ^6.3.0
         version: 6.3.0
       typescript:
-        specifier: ^5.8.2
-        version: 5.8.2
+        specifier: ^5.9.3
+        version: 5.9.3
       vite:
-        specifier: ^7.1.4
-        version: 7.1.4(terser@5.39.0)
+        specifier: ^7.1.9
+        version: 7.1.9(terser@5.39.0)
       vite-plugin-minify:
         specifier: ^2.1.0
-        version: 2.1.0(vite@7.1.4(terser@5.39.0))
+        version: 2.1.0(vite@7.1.9(terser@5.39.0))
 
 packages:
 
@@ -536,8 +536,8 @@ packages:
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
-  jspdf@3.0.2:
-    resolution: {integrity: sha512-G0fQDJ5fAm6UW78HG6lNXyq09l0PrA1rpNY5i+ly17Zb1fMMFSmS+3lw4cnrAPGyouv2Y0ylujbY2Ieq3DSlKA==}
+  jspdf@3.0.3:
+    resolution: {integrity: sha512-eURjAyz5iX1H8BOYAfzvdPfIKK53V7mCpBTe7Kb16PaM8JSXEcUQNBQaiWMI8wY5RvNOPj4GccMjTlfwRBd+oQ==}
 
   locate-path@5.0.0:
     resolution: {integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==}
@@ -694,8 +694,8 @@ packages:
   tga-js@1.1.1:
     resolution: {integrity: sha512-2EcbDHfFCggAt0DLjUwZzKaQGaCmcQZBQrYscVnWjxzl+2Q1PFp1ABsO2UVevF1pTi2t9mmWkzPaQqUeJA+mhA==}
 
-  tinyglobby@0.2.14:
-    resolution: {integrity: sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==}
+  tinyglobby@0.2.15:
+    resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
     engines: {node: '>=12.0.0'}
 
   to-regex-range@5.0.1:
@@ -709,8 +709,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  typescript@5.8.2:
-    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -729,8 +729,8 @@ packages:
     peerDependencies:
       vite: '>=5'
 
-  vite@7.1.4:
-    resolution: {integrity: sha512-X5QFK4SGynAeeIt+A7ZWnApdUyHYm+pzv/8/A57LqSGcI88U6R6ipOs3uCesdc6yl7nl+zNO0t8LmqAdXcQihw==}
+  vite@7.1.9:
+    resolution: {integrity: sha512-4nVGliEpxmhCL8DslSAUdxlB6+SMrhB0a1v5ijlh1xB1nEPuy1mxaHxysVucLHuWryAxLWg6a5ei+U4TLn/rFg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -1189,7 +1189,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  jspdf@3.0.2:
+  jspdf@3.0.3:
     dependencies:
       '@babel/runtime': 7.27.0
       fast-png: 6.4.0
@@ -1360,7 +1360,7 @@ snapshots:
 
   tga-js@1.1.1: {}
 
-  tinyglobby@0.2.14:
+  tinyglobby@0.2.15:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
@@ -1375,7 +1375,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  typescript@5.8.2: {}
+  typescript@5.9.3: {}
 
   universalify@2.0.1: {}
 
@@ -1386,20 +1386,20 @@ snapshots:
 
   uzip@0.20201231.0: {}
 
-  vite-plugin-minify@2.1.0(vite@7.1.4(terser@5.39.0)):
+  vite-plugin-minify@2.1.0(vite@7.1.9(terser@5.39.0)):
     dependencies:
       '@types/html-minifier-terser': 7.0.2
       html-minifier-terser: 7.2.0
-      vite: 7.1.4(terser@5.39.0)
+      vite: 7.1.9(terser@5.39.0)
 
-  vite@7.1.4(terser@5.39.0):
+  vite@7.1.9(terser@5.39.0):
     dependencies:
       esbuild: 0.25.9
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
       postcss: 8.5.6
       rollup: 4.50.0
-      tinyglobby: 0.2.14
+      tinyglobby: 0.2.15
     optionalDependencies:
       fsevents: 2.3.3
       terser: 5.39.0
