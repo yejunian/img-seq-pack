@@ -219,7 +219,8 @@ class DocumentBuilder {
       image.y + this.descriptionHeight,
       image.width,
       image.height,
-      `${imageIndex}`
+      `${imageIndex}`,
+      'FAST'
     )
 
     if (this.options.pageNumber && pageNumber) {
