@@ -5,7 +5,7 @@ export default defineConfig({
   base: '/img-seq-pack/',
 
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       external: ['canvg', 'html2canvas', 'dompurify'],
     },
   },

@@ -1,5 +1,5 @@
 import imageCompression from 'browser-image-compression'
-import jsPDF, { TextOptionsLight } from 'jspdf'
+import { jsPDF, TextOptionsLight } from 'jspdf'
 import type ImageInfo from './ImageInfo'
 
 type RenderArea = {
