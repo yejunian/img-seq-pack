@@ -40,16 +40,15 @@
 
 ## 개발 환경
 
-* Node.js 18
-* Yarn 1.22
-* \[선택] `deploy` 스크립트를 실행하려면  Git >= 1.9가 필요합니다.
+* Node.js 24
+* pnpm 10
 
 ### 스크립트
 
 * `pnpm dev`: 개발 서버를 실행합니다.
 * `pnpm build`: 프로덕션 페이지를 빌드합니다.
 * `pnpm preview`: 프로덕션 빌드를 확인하기 위한 로컬 서버를 실행합니다.
-* `pnpm run deploy`: 프로덕션 빌드를 수행하고, 그 결과물을 복사하여 `gh-pages` 브랜치에 반영합니다.
+* GitHub Actions의 [`deploy-pages.yml`](.github/workflows/deploy-pages.yml): `main` 브랜치 푸시 또는 수동 실행 시 프로덕션 빌드를 수행하고 GitHub Pages에 배포합니다.
 
 ### 이미지 처리 특이사항
 
